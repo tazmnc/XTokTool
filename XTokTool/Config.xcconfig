@@ -1,0 +1,11 @@
+// XTokTool — cấu hình build.
+// TikTok Client Key tuỳ chọn cho Login Kit OAuth.
+// MẶC ĐỊNH ĐỂ TRỐNG: app dùng Web Login qua tiktok.com/login, không cần
+// đăng ký app TikTok, không hardcode key/secret trong source.
+// Nếu bạn có Client Key, điền vào đây (hoặc nhập trong Settings của app):
+//   TIKTOK_CLIENT_KEY = abc123...
+// KHÔNG commit Client Secret vào repo.
+TIKTOK_CLIENT_KEY =
+PRODUCT_BUNDLE_IDENTIFIER = com.mintaz.xtoktool
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+SWIFT_VERSION = 5.0
