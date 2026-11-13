@@ -18,8 +18,7 @@ struct LoginView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Spacer()
-                Text("🎵")
-                    .font(.system(size: 64))
+                AppLogoImage(size: 96)
                 Text("XTokTool")
                     .font(.system(size: 40, weight: .black))
                     .foregroundStyle(

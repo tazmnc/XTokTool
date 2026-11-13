@@ -10,6 +10,7 @@ struct FollowingListView: View {
     @State private var isScanning = false
     @State private var scanMessage = ""
     @State private var keepInput = ""
+    @State private var scanTask: Task<Void, Never>?
 
     enum Filter: String, CaseIterable {
         case all = "Tất cả"
@@ -44,8 +45,12 @@ struct FollowingListView: View {
             .padding()
 
             if isScanning {
-                ProgressView("Đang quét trang Following… (cuộn nhiều lần để tải hết)")
-                    .padding()
+                HStack {
+                    ProgressView("Đang quét…")
+                    Spacer()
+                    Button("Dừng quét", role: .destructive) { scanTask?.cancel() }
+                }
+                .padding()
             }
             if !scanMessage.isEmpty {
                 Text(scanMessage).font(.footnote).foregroundStyle(.secondary).padding(.horizontal)
@@ -113,6 +118,7 @@ struct FollowingListView: View {
             .padding()
         }
         .navigationTitle("Following")
+        .onDisappear { scanTask?.cancel() }
     }
 
     private func selectAll(_ value: Bool) {
@@ -130,22 +136,37 @@ struct FollowingListView: View {
             return
         }
         isScanning = true
-        scanMessage = ""
-        Task {
-            web.loadFollowingPage(username: username)
-            await web.wait(seconds: 4)
-            // Đối chiếu followers để xác định mutual chính xác hơn.
-            var followers = Set<String>()
-            web.load(URL(string: "https://www.tiktok.com/@\(username)/followers")!)
-            await web.wait(seconds: 4)
-            if let json = await web.evaluateString(TikTokWebService.collectFollowerUsernamesJS),
-               let data = json.data(using: .utf8),
-               let names = try? JSONDecoder().decode([String].self, from: data) {
-                followers = Set(names.map { $0.lowercased() })
+        scanMessage = "Đang mở trang Following…"
+        scanTask?.cancel()
+        scanTask = Task {
+            defer {
+                isScanning = false
+                if Task.isCancelled { scanMessage = "Đã dừng quét." }
             }
             web.loadFollowingPage(username: username)
-            await web.wait(seconds: 4)
-            var users = await web.collectFollowing(maxScrolls: 20)
+            // Chờ tới khi card tài khoản hiện ra (thường 1–3 giây), thay vì
+            // chờ cứng 4 giây như trước — quét nhanh hơn hẳn.
+            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
+            guard !Task.isCancelled else { return }
+            // Đối chiếu followers để xác định mutual chính xác hơn.
+            var followers = Set<String>()
+            if let followersURL = URL(string: "https://www.tiktok.com/@\(username)/followers") {
+                web.load(followersURL)
+                _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
+                if !Task.isCancelled,
+                   let json = await web.evaluateString(TikTokWebService.collectFollowerUsernamesJS),
+                   let data = json.data(using: .utf8),
+                   let names = try? JSONDecoder().decode([String].self, from: data) {
+                    followers = Set(names.map { $0.lowercased() })
+                }
+            }
+            guard !Task.isCancelled else { return }
+            web.loadFollowingPage(username: username)
+            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
+            var users = await web.collectFollowing(maxScrolls: 30) { count in
+                scanMessage = "Đang quét… đã thấy \(count) người"
+            }
+            guard !Task.isCancelled else { return }
             for i in users.indices {
                 if followers.contains(users[i].username.lowercased()) {
                     users[i].status = .friend
@@ -167,7 +188,6 @@ struct FollowingListView: View {
             storage.saveStats()
             storage.addLog(.success, "Quét Following: \(users.count) người, \(storage.stats.totalFriends) bạn bè, \(storage.stats.totalNotFollowingBack) không follow lại.")
             scanMessage = "Quét xong: \(users.count) người • \(storage.stats.totalFriends) bạn bè • \(storage.stats.totalNotFollowingBack) không follow lại."
-            isScanning = false
         }
     }
 }

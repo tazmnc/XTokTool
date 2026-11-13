@@ -35,6 +35,7 @@ struct HomeView: View {
 
     private var header: some View {
         VStack(spacing: 6) {
+            AppLogoImage(size: 64)
             Text("👋 Xin chào")
                 .font(.headline)
             Text("@\(auth.username.isEmpty ? storage.savedUsername : auth.username)")

@@ -14,6 +14,8 @@ final class TikTokWebService: ObservableObject {
     @Published var currentURL: URL?
     @Published var isLoading = false
 
+    private let navigationDelegate = WebProcessDelegate()
+
     init() {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
@@ -22,6 +24,10 @@ final class TikTokWebService: ObservableObject {
         config.mediaTypesRequiringUserActionForPlayback = []
         webView = WKWebView(frame: .zero, configuration: config)
         webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+        // Tự tải lại trang khi tiến trình web bị hệ thống kill (hết RAM):
+        // tránh màn hình trắng / app đơ giữa chừng khi quét.
+        navigationDelegate.webView = webView
+        webView.navigationDelegate = navigationDelegate
     }
 
     var cookieStore: WKHTTPCookieStore {
@@ -61,6 +67,22 @@ final class TikTokWebService: ObservableObject {
     func wait(seconds: Double) async {
         try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
     }
+
+    /// Chờ tới khi JS trả về true (nội dung đã tải), tối đa `timeout` giây.
+    /// Nhanh hơn chờ cứng nhiều giây: trang nhẹ thì đi tiếp ngay, trang nặng
+    /// thì chờ tối đa tới timeout rồi thôi.
+    func waitForContent(js: String, timeout: Double = 12, pollInterval: Double = 0.5) async -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if Task.isCancelled { return false }
+            if let ok = try? await webView.evaluateJavaScript(js) as? Bool, ok { return true }
+            await wait(seconds: pollInterval)
+        }
+        return false
+    }
+
+    /// Có card tài khoản trên trang /following hoặc /followers chưa?
+    static let hasUserCardsJS = "document.querySelectorAll('a[href^=\"/@\"]').length > 3"
 
     /// Cuộn xuống cuối trang `times` lần, mỗi lần cách nhau `interval` giây.
     func scrollDown(times: Int, interval: Double = 1.5) async {
@@ -117,15 +139,22 @@ final class TikTokWebService: ObservableObject {
     })();
     """
 
-    /// Quét danh sách Following: cuộn nhiều lần rồi gom JS.
-    func collectFollowing(maxScrolls: Int = 20) async -> [TikTokUser] {
+    /// Quét danh sách Following: cuộn tới khi không còn người mới (dừng sớm
+    /// sau 2 lần cuộn không thêm ai), tối đa `maxScrolls` lần, mỗi lần cách
+    /// nhau 0.8 giây. `onProgress` báo số người đã gom được để UI cập nhật
+    /// trực tiếp. Trả về danh sách đã gom tới lúc dừng / bị huỷ.
+    func collectFollowing(maxScrolls: Int = 30, onProgress: ((Int) -> Void)? = nil) async -> [TikTokUser] {
         var all: [TikTokUser] = []
         var seen = Set<String>()
+        var emptyStreak = 0
         for _ in 0..<maxScrolls {
-            await scrollDown(times: 1, interval: 1.2)
+            if Task.isCancelled { break }
+            if all.count >= 2000 { break }
+            await scrollDown(times: 1, interval: 0.8)
             guard let json = await evaluateString(Self.collectFollowingJS),
                   let data = json.data(using: .utf8),
                   let rows = try? JSONDecoder().decode([FollowingRowDTO].self, from: data) else { continue }
+            var added = 0
             for row in rows where !seen.contains(row.username.lowercased()) {
                 seen.insert(row.username.lowercased())
                 all.append(TikTokUser(
@@ -135,7 +164,15 @@ final class TikTokWebService: ObservableObject {
                     isVerified: row.isVerified,
                     status: row.isFriend ? .friend : .notFollowingBack
                 ))
+                added += 1
             }
+            if added == 0 {
+                emptyStreak += 1
+                if emptyStreak >= 2 { break } // Hết danh sách — dừng sớm, khỏi cuộn vô ích.
+            } else {
+                emptyStreak = 0
+            }
+            onProgress?(all.count)
         }
         return all
     }
@@ -234,14 +271,25 @@ final class TikTokWebService: ObservableObject {
     })();
     """
 
-    func collectRepostLinks(maxScrolls: Int = 20) async -> [RepostVideo] {
+    func collectRepostLinks(maxScrolls: Int = 30, onProgress: ((Int) -> Void)? = nil) async -> [RepostVideo] {
         var urls = Set<String>()
+        var emptyStreak = 0
         for _ in 0..<maxScrolls {
-            await scrollDown(times: 1, interval: 1.2)
+            if Task.isCancelled { break }
+            if urls.count >= 1000 { break }
+            await scrollDown(times: 1, interval: 0.8)
             guard let json = await evaluateString(Self.collectRepostLinksJS),
                   let data = json.data(using: .utf8),
                   let links = try? JSONDecoder().decode([String].self, from: data) else { continue }
+            let before = urls.count
             links.forEach { urls.insert($0) }
+            if urls.count == before {
+                emptyStreak += 1
+                if emptyStreak >= 2 { break }
+            } else {
+                emptyStreak = 0
+            }
+            onProgress?(urls.count)
         }
         return urls.sorted().map { RepostVideo(url: $0) }
     }
@@ -280,4 +328,16 @@ private struct FollowingRowDTO: Decodable {
     var avatarURL: String
     var isVerified: Bool
     var isFriend: Bool
+}
+
+/// Delegate riêng cho WKWebView: WKNavigationDelegate bắt buộc là NSObject,
+/// nên không để TikTokWebService (class Swift thuần) làm delegate được.
+private final class WebProcessDelegate: NSObject, WKNavigationDelegate {
+    weak var webView: WKWebView?
+
+    /// Tiến trình web bị hệ thống kill (thường do hết RAM) — tải lại trang
+    /// thay vì để màn hình trắng / app đơ.
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        webView.reload()
+    }
 }
