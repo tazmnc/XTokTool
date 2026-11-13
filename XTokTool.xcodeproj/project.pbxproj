@@ -21,7 +21,6 @@
 		9B56D716D4AC5815342B466F /* RepostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9B94F253729541D3BA920C /* RepostView.swift */; };
 		0366047E1EAD5CC5EA2D8838 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6C00F877111216236EB6BB /* SettingsView.swift */; };
 		20C8A23925DEC63A99535A6B /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CC878B3EF2A95285A99B47 /* LogView.swift */; };
-		DB249DB9D0FF833647E29581 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC13B5EC966CE305A2FA173A /* Assets.xcassets */; };
 		E0CD4B5E9FEABD632105FAA4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2EE9E750453353D41FC129 /* WebKit.framework */; };
 		D2ADC69F63385BFEF211D590 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A2B6641E4A86127DAE3CB9 /* AuthenticationServices.framework */; };
 /* End PBXBuildFile section */
@@ -42,7 +41,6 @@
 		9B6C00F877111216236EB6BB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		94CC878B3EF2A95285A99B47 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		901C68854DFAC5E156E065D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AC13B5EC966CE305A2FA173A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2942C6AE58CC1704BD36BD48 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		0F2EE9E750453353D41FC129 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		24A2B6641E4A86127DAE3CB9 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
@@ -86,7 +84,6 @@
 			); path = Views; sourceTree = "<group>"; };
 		887A6F90336FF23D95C3914B /* Resources */ = {isa = PBXGroup; children = (
 				901C68854DFAC5E156E065D1 /* Info.plist */,
-				AC13B5EC966CE305A2FA173A /* Assets.xcassets */,
 			); path = Resources; sourceTree = "<group>"; };
 		FF960AF125284A3362943246 /* XTokTool */ = {isa = PBXGroup; children = (
 				D1D0524B025E57AFFF263442 /* App */,
@@ -156,7 +153,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB249DB9D0FF833647E29581 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,7 +187,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -235,7 +230,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -272,7 +266,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2942C6AE58CC1704BD36BD48 /* Config.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -298,7 +291,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2942C6AE58CC1704BD36BD48 /* Config.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";

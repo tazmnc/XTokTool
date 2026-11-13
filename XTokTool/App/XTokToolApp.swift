@@ -34,6 +34,6 @@ struct ContentView: View {
                 LoginView()
             }
         }
-        .tint(Color("AccentColor"))
+        .tint(Color(red: 254/255, green: 44/255, blue: 85/255)) // Hồng TikTok #FE2C55 (không dùng Assets.xcassets nữa)
     }
 }
