@@ -127,52 +127,45 @@ final class TikTokWebService: ObservableObject {
     })();
     """
 
-    /// Gom username ở trang /followers để đối chiếu mutual.
-    static let collectFollowerUsernamesJS = """
-    (() => {
-      const out = new Set();
-      document.querySelectorAll('a[href^="/@"]').forEach(a => {
-        const m = a.getAttribute('href').match(/^\\/@([^/?#]+)/);
-        if (m) out.add(m[1]);
-      });
-      return JSON.stringify(Array.from(out));
-    })();
-    """
-
-    /// Quét danh sách Following: cuộn tới khi không còn người mới (dừng sớm
-    /// sau 2 lần cuộn không thêm ai), tối đa `maxScrolls` lần, mỗi lần cách
-    /// nhau 0.8 giây. `onProgress` báo số người đã gom được để UI cập nhật
-    /// trực tiếp. Trả về danh sách đã gom tới lúc dừng / bị huỷ.
-    func collectFollowing(maxScrolls: Int = 30, onProgress: ((Int) -> Void)? = nil) async -> [TikTokUser] {
+    /// Quét Following kiểu mới (streaming): cuộn tới khi không còn người mới
+    /// (dừng sớm sau 2 lần cuộn không thêm ai), tối đa `maxScrolls` lần,
+    /// mỗi lần cách nhau 0.7 giây. Khác cách cũ ở chỗ: mỗi đợt gom được
+    /// người mới thì trả về NGAY qua `onBatch` để UI hiện + lưu ngay — không
+    /// chờ quét hết mới hiện danh sách, và không tải thêm trang /followers
+    /// (trang nặng, là nguyên nhân chính gây crash). Trạng thái bạn bè lấy
+    /// từ nhãn "Friends / Bạn bè" trên thẻ. Trả về toàn bộ đã gom được tới
+    /// lúc dừng / bị huỷ (kể cả khi bị huỷ giữa chừng, dữ liệu đã hiện vẫn còn).
+    func streamFollowing(maxScrolls: Int = 40, onBatch: @escaping ([TikTokUser]) -> Void, onProgress: ((Int) -> Void)? = nil) async -> [TikTokUser] {
         var all: [TikTokUser] = []
         var seen = Set<String>()
         var emptyStreak = 0
         for _ in 0..<maxScrolls {
             if Task.isCancelled { break }
             if all.count >= 2000 { break }
-            await scrollDown(times: 1, interval: 0.8)
+            await scrollDown(times: 1, interval: 0.7)
             guard let json = await evaluateString(Self.collectFollowingJS),
                   let data = json.data(using: .utf8),
                   let rows = try? JSONDecoder().decode([FollowingRowDTO].self, from: data) else { continue }
-            var added = 0
+            var batch: [TikTokUser] = []
             for row in rows where !seen.contains(row.username.lowercased()) {
                 seen.insert(row.username.lowercased())
-                all.append(TikTokUser(
+                batch.append(TikTokUser(
                     username: row.username,
                     displayName: row.displayName.isEmpty ? row.username : row.displayName,
                     avatarURL: row.avatarURL.isEmpty ? nil : row.avatarURL,
                     isVerified: row.isVerified,
                     status: row.isFriend ? .friend : .notFollowingBack
                 ))
-                added += 1
             }
-            if added == 0 {
+            if batch.isEmpty {
                 emptyStreak += 1
                 if emptyStreak >= 2 { break } // Hết danh sách — dừng sớm, khỏi cuộn vô ích.
             } else {
                 emptyStreak = 0
+                all.append(contentsOf: batch)
+                onBatch(batch)
+                onProgress?(all.count)
             }
-            onProgress?(all.count)
         }
         return all
     }

@@ -1,19 +1,22 @@
 import SwiftUI
 
-/// Màn hình chính: thống kê + điều hướng tới các chức năng.
+/// Màn hình chính — gọn: logo + tài khoản, 3 số liệu, 4 chức năng chính.
 struct HomeView: View {
     @EnvironmentObject private var auth: TikTokAuthManager
     @EnvironmentObject private var storage: StorageManager
     @EnvironmentObject private var web: TikTokWebService
 
+    private var friendsCount: Int { storage.following.filter { $0.status == .friend }.count }
+    private var notBackCount: Int { storage.following.filter { $0.status == .notFollowingBack }.count }
+
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: 20) {
                     header
-                    statsGrid
-                    menu
-                    warningCard
+                    statsRow
+                    actions
+                    footnote
                 }
                 .padding()
             }
@@ -34,87 +37,69 @@ struct HomeView: View {
     }
 
     private var header: some View {
-        VStack(spacing: 6) {
-            AppLogoImage(size: 64)
-            Text("👋 Xin chào")
-                .font(.headline)
+        VStack(spacing: 8) {
+            AppLogoImage(size: 72)
             Text("@\(auth.username.isEmpty ? storage.savedUsername : auth.username)")
                 .font(.title2.bold())
-                .foregroundStyle(.pink)
-            Text(auth.isLoggedIn ? "Đã đăng nhập TikTok" : "Chưa đăng nhập — vào Đăng nhập để quét")
-                .font(.caption)
+            Label(auth.isLoggedIn ? "Đã đăng nhập TikTok" : "Chưa đăng nhập", systemImage: auth.isLoggedIn ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                .font(.subheadline)
                 .foregroundStyle(auth.isLoggedIn ? .green : .orange)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.white.opacity(0.06))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding(.vertical, 8)
     }
 
-    private var statsGrid: some View {
-        let s = storage.stats
-        let friends = storage.following.filter { $0.status == .friend }.count
-        let notBack = storage.following.filter { $0.status == .notFollowingBack }.count
-        return LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-            StatCard(title: "Đang follow", value: "\(storage.following.count)", icon: "person.2.fill")
-            StatCard(title: "Bạn bè (mutual)", value: "\(friends)", icon: "person.2.circle.fill")
-            StatCard(title: "Không follow lại", value: "\(notBack)", icon: "person.slash.fill")
-            StatCard(title: "Đã huỷ follow", value: "\(s.totalUnfollowed)", icon: "person.badge.minus.fill")
-            StatCard(title: "Đã gỡ repost", value: "\(s.totalRepostsRemoved)", icon: "arrow.uturn.backward.circle.fill")
-            StatCard(title: "Video repost đã quét", value: "\(storage.reposts.count)", icon: "repeat.circle.fill")
+    private var statsRow: some View {
+        HStack(spacing: 12) {
+            StatChip(title: "Đang follow", value: "\(storage.following.count)")
+            StatChip(title: "Bạn bè", value: "\(friendsCount)")
+            StatChip(title: "Không follow lại", value: "\(notBackCount)")
         }
     }
 
-    private var menu: some View {
+    private var actions: some View {
         VStack(spacing: 12) {
             NavigationLink(destination: FollowingListView()) {
-                MenuRow(icon: "person.3.fill", title: "Danh sách Following", subtitle: "Quét, phân loại bạn bè / không follow lại, chọn & giữ lại")
+                ActionRow(icon: "person.3.fill", title: "Quét Following", subtitle: "Quét danh sách, phân loại bạn bè / không follow lại")
             }
             NavigationLink(destination: UnfollowView()) {
-                MenuRow(icon: "person.badge.minus.fill", title: "Huỷ follow", subtitle: "Huỷ người đã chọn, hoặc huỷ tất cả trừ bạn bè + whitelist")
+                ActionRow(icon: "person.badge.minus.fill", title: "Huỷ follow", subtitle: "Huỷ người đã chọn, hoặc huỷ tất cả trừ bạn bè + giữ lại")
             }
             NavigationLink(destination: RepostView()) {
-                MenuRow(icon: "repeat.circle.fill", title: "Xoá bài đăng lại (Repost)", subtitle: "Quét tab Reposts và gỡ từng video")
+                ActionRow(icon: "repeat.circle.fill", title: "Xoá bài đăng lại", subtitle: "Quét tab Reposts và gỡ từng video")
             }
             NavigationLink(destination: ExtraToolsView()) {
-                MenuRow(icon: "ellipsis.circle.fill", title: "Công cụ thêm", subtitle: "Bỏ thích video, xoá video của mình (xác nhận từng cái)")
+                ActionRow(icon: "ellipsis.circle.fill", title: "Công cụ thêm", subtitle: "Bỏ thích, xoá video của mình, thống kê")
             }
         }
     }
 
-    private var warningCard: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Label("Lưu ý an toàn", systemImage: "exclamationmark.triangle.fill")
-                .font(.headline).foregroundStyle(.yellow)
-            Text("Huỷ follow / gỡ repost hàng loạt có thể khiến TikTok giới hạn tạm thời hoặc khoá tài khoản. Hãy chạy Dry-run trước, giới hạn mỗi phiên 30 người, để delay 5–12 giây. Thao tác không hoàn tác được.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .background(Color.yellow.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+    private var footnote: some View {
+        Text("Huỷ follow / gỡ repost hàng loạt có thể khiến TikTok giới hạn tạm thời. Chạy Dry-run trước, mỗi phiên tối đa 30 người, delay 5–12 giây. Thao tác không hoàn tác được.")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 8)
     }
 }
 
-struct StatCard: View {
+struct StatChip: View {
     var title: String
     var value: String
-    var icon: String
 
     var body: some View {
-        VStack(spacing: 6) {
-            Image(systemName: icon).font(.title2).foregroundStyle(.pink)
-            Text(value).font(.title.bold())
+        VStack(spacing: 2) {
+            Text(value).font(.title2.bold())
             Text(title).font(.caption).foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.white.opacity(0.06))
+        .padding(.vertical, 12)
+        .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
-struct MenuRow: View {
+struct ActionRow: View {
     var icon: String
     var title: String
     var subtitle: String
@@ -133,7 +118,7 @@ struct MenuRow: View {
             Image(systemName: "chevron.right").foregroundStyle(.secondary)
         }
         .padding()
-        .background(Color.white.opacity(0.06))
+        .background(Color(.secondarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }

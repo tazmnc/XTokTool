@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Quét Following, phân loại, tìm kiếm, chọn / giữ lại.
+/// Màn Quét Following — giao diện gọn: 1 thẻ quét, bộ lọc, danh sách hiện
+/// dần từng đợt trong lúc quét (không chờ quét xong mới hiện).
 struct FollowingListView: View {
     @EnvironmentObject private var storage: StorageManager
     @EnvironmentObject private var web: TikTokWebService
@@ -16,7 +17,6 @@ struct FollowingListView: View {
         case all = "Tất cả"
         case friends = "Bạn bè"
         case notBack = "Không follow lại"
-        case followingMe = "Đang follow mình"
     }
 
     var filtered: [TikTokUser] {
@@ -25,7 +25,6 @@ struct FollowingListView: View {
         case .all: break
         case .friends: list = list.filter { $0.status == .friend }
         case .notBack: list = list.filter { $0.status == .notFollowingBack }
-        case .followingMe: list = list.filter { $0.status == .followingMe }
         }
         if !searchText.isEmpty {
             let q = searchText.lowercased()
@@ -35,29 +34,22 @@ struct FollowingListView: View {
     }
 
     var selectedCount: Int { storage.following.filter(\.isSelected).count }
+    var friendsCount: Int { storage.following.filter { $0.status == .friend }.count }
+    var notBackCount: Int { storage.following.filter { $0.status == .notFollowingBack }.count }
 
     var body: some View {
         VStack(spacing: 0) {
+            scanCard
+
             Picker("Lọc", selection: $filter) {
                 ForEach(Filter.allCases, id: \.self) { f in Text(f.rawValue).tag(f) }
             }
             .pickerStyle(.segmented)
-            .padding()
-
-            if isScanning {
-                HStack {
-                    ProgressView("Đang quét…")
-                    Spacer()
-                    Button("Dừng quét", role: .destructive) { scanTask?.cancel() }
-                }
-                .padding()
-            }
-            if !scanMessage.isEmpty {
-                Text(scanMessage).font(.footnote).foregroundStyle(.secondary).padding(.horizontal)
-            }
+            .padding(.horizontal)
+            .padding(.top, 4)
 
             List {
-                Section("Giữ lại (whitelist) — những người này không bao giờ bị huỷ") {
+                DisclosureGroup("Giữ lại — \(storage.keepList.usernames.count) người (không bao giờ bị huỷ)") {
                     HStack {
                         TextField("Nhập @username để giữ lại", text: $keepInput)
                             .textInputAutocapitalization(.never)
@@ -81,16 +73,20 @@ struct FollowingListView: View {
                             }
                         }
                     } else {
-                        Text("Chưa có ai trong danh sách giữ lại. Bạn bè được gợi ý giữ lại bằng nút dưới.")
+                        Text("Chưa có ai. Bạn bè được gợi ý giữ lại bằng nút dưới.")
                             .font(.caption).foregroundStyle(.secondary)
                     }
-                    Button("Gợi ý: giữ lại toàn bộ bạn bè") {
+                    Button("Giữ lại toàn bộ bạn bè") {
                         storage.suggestKeepFriends()
                         scanMessage = "Đã thêm bạn bè vào danh sách giữ lại."
                     }
                 }
 
                 Section("Đã chọn: \(selectedCount) / \(storage.following.count) người") {
+                    if filtered.isEmpty {
+                        Text(isScanning ? "Đang quét, danh sách sẽ hiện dần ở đây…" : "Chưa có ai — bấm Quét để quét danh sách Following.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
                     ForEach(filtered) { user in
                         FollowingRow(user: user) { newValue in
                             if let i = storage.following.firstIndex(where: { $0.username == user.username }) {
@@ -103,22 +99,59 @@ struct FollowingListView: View {
                     }
                 }
             }
+            .listStyle(.insetGrouped)
             .searchable(text: $searchText, prompt: "Tìm theo tên / username")
 
-            HStack(spacing: 8) {
-                Button("Chọn tất cả") { selectAll(true) }
-                Button("Bỏ chọn") { selectAll(false) }
-                Button("Đảo ngược") { invertSelection() }
-                Spacer()
-                Button("Quét Following") { scan() }
-                    .buttonStyle(.borderedProminent).tint(.pink)
-                    .disabled(isScanning)
-            }
-            .font(.footnote)
-            .padding()
+            bottomBar
         }
-        .navigationTitle("Following")
+        .navigationTitle("Quét Following")
+        .navigationBarTitleDisplayMode(.inline)
         .onDisappear { scanTask?.cancel() }
+    }
+
+    private var scanCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(isScanning ? "Đang quét…" : "Danh sách Following")
+                        .font(.headline)
+                    Text(scanMessage.isEmpty
+                         ? "\(storage.following.count) người • \(friendsCount) bạn bè • \(notBackCount) không follow lại"
+                         : scanMessage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+                Spacer()
+                if isScanning {
+                    Button("Dừng", role: .destructive) { scanTask?.cancel() }
+                        .buttonStyle(.bordered)
+                } else {
+                    Button("Quét") { startScan() }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.pink)
+                }
+            }
+            if isScanning {
+                ProgressView()
+                    .tint(.pink)
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding()
+    }
+
+    private var bottomBar: some View {
+        HStack(spacing: 16) {
+            Button("Chọn tất cả") { selectAll(true) }
+            Button("Bỏ chọn") { selectAll(false) }
+            Button("Đảo ngược") { invertSelection() }
+        }
+        .font(.subheadline)
+        .padding()
+        .background(Color(.systemBackground))
     }
 
     private func selectAll(_ value: Bool) {
@@ -129,65 +162,51 @@ struct FollowingListView: View {
         for i in storage.following.indices { storage.following[i].isSelected.toggle() }
     }
 
-    private func scan() {
+    private func startScan() {
         let username = storage.savedUsername
         guard !username.isEmpty else {
             scanMessage = "Chưa có username — đăng nhập trước."
             return
         }
+        scanTask?.cancel()
         isScanning = true
         scanMessage = "Đang mở trang Following…"
-        scanTask?.cancel()
         scanTask = Task {
             defer {
                 isScanning = false
-                if Task.isCancelled { scanMessage = "Đã dừng quét." }
+                if Task.isCancelled {
+                    scanMessage = "Đã dừng — giữ \(storage.following.count) người đã thấy."
+                }
             }
+            // Cách quét mới: chỉ tải trang /following MỘT lần, gom người mới
+            // theo từng đợt và hiện + lưu ngay từng đợt — không tải thêm
+            // trang /followers, không chờ cứng, không gom hết rồi mới hiện.
+            // Nhờ vậy app nhẹ hơn nhiều, và nếu có văng giữa chừng thì
+            // những người đã thấy vẫn còn, không mất hết.
             web.loadFollowingPage(username: username)
-            // Chờ tới khi card tài khoản hiện ra (thường 1–3 giây), thay vì
-            // chờ cứng 4 giây như trước — quét nhanh hơn hẳn.
-            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
+            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 15)
             guard !Task.isCancelled else { return }
-            // Đối chiếu followers để xác định mutual chính xác hơn.
-            var followers = Set<String>()
-            if let followersURL = URL(string: "https://www.tiktok.com/@\(username)/followers") {
-                web.load(followersURL)
-                _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
-                if !Task.isCancelled,
-                   let json = await web.evaluateString(TikTokWebService.collectFollowerUsernamesJS),
-                   let data = json.data(using: .utf8),
-                   let names = try? JSONDecoder().decode([String].self, from: data) {
-                    followers = Set(names.map { $0.lowercased() })
+            _ = await web.streamFollowing(maxScrolls: 40, onBatch: { batch in
+                let fresh = batch.filter { b in
+                    !storage.following.contains(where: { $0.username.lowercased() == b.username.lowercased() })
                 }
-            }
+                guard !fresh.isEmpty else { return }
+                var fresh = fresh
+                for i in fresh.indices {
+                    fresh[i].isKept = storage.keepList.contains(fresh[i].username)
+                }
+                storage.following.append(contentsOf: fresh)
+                storage.saveFollowing()
+                scanMessage = "Đã thấy \(storage.following.count) người…"
+            })
             guard !Task.isCancelled else { return }
-            web.loadFollowingPage(username: username)
-            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 12)
-            var users = await web.collectFollowing(maxScrolls: 30) { count in
-                scanMessage = "Đang quét… đã thấy \(count) người"
-            }
-            guard !Task.isCancelled else { return }
-            for i in users.indices {
-                if followers.contains(users[i].username.lowercased()) {
-                    users[i].status = .friend
-                } else if users[i].status == .friend {
-                    users[i].status = .notFollowingBack
-                }
-                users[i].isKept = storage.keepList.contains(users[i].username)
-                // Giữ lại lựa chọn cũ nếu đã quét trước đó.
-                if let old = storage.following.first(where: { $0.username == users[i].username }) {
-                    users[i].isSelected = old.isSelected
-                }
-            }
-            storage.following = users
-            storage.saveFollowing()
-            storage.stats.totalFollowing = users.count
-            storage.stats.totalFriends = users.filter { $0.status == .friend }.count
-            storage.stats.totalNotFollowingBack = users.filter { $0.status == .notFollowingBack }.count
+            storage.stats.totalFollowing = storage.following.count
+            storage.stats.totalFriends = friendsCount
+            storage.stats.totalNotFollowingBack = notBackCount
             storage.stats.lastScanDate = Date()
             storage.saveStats()
-            storage.addLog(.success, "Quét Following: \(users.count) người, \(storage.stats.totalFriends) bạn bè, \(storage.stats.totalNotFollowingBack) không follow lại.")
-            scanMessage = "Quét xong: \(users.count) người • \(storage.stats.totalFriends) bạn bè • \(storage.stats.totalNotFollowingBack) không follow lại."
+            storage.addLog(.success, "Quét Following: \(storage.following.count) người, \(friendsCount) bạn bè, \(notBackCount) không follow lại.")
+            scanMessage = "Quét xong: \(storage.following.count) người • \(friendsCount) bạn bè • \(notBackCount) không follow lại."
         }
     }
 }
