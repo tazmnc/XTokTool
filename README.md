@@ -61,7 +61,7 @@ XTokTool/
 │   │   ├── Info.plist                   # bundle id com.mintaz.xtoktool
 │   │   └── Assets.xcassets/             # AppIcon (placeholder) + AccentColor (#FE2C55)
 │   └── Config.xcconfig                  # TIKTOK_CLIENT_KEY = "" (trống mặc định)
-├── .github/workflows/build-ipa.yml      # CI: build IPA unsigned trên macos-14
+├── .github/workflows/build-ipa.yml      # CI: build IPA unsigned trên macos-15
 ├── .gitignore
 └── README.md
 ```
