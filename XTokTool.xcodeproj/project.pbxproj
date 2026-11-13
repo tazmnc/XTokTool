@@ -51,12 +51,12 @@
 		0F2EE9E750453353D41FC129 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		24A2B6641E4A86127DAE3CB9 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		FE930DE1182D979D65C54991 /* XTokTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XTokTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		83E26C1F1F7CB6393E9FB5D9 /* AppIcon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon-1024.png; sourceTree = "<group>"; };
-		23700102E4A0324A4BF3B8DF /* AppIcon60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon60@2x.png; sourceTree = "<group>"; };
-		B9CEFF513C4C101C1DB0B8F8 /* AppIcon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon60@3x.png; sourceTree = "<group>"; };
-		A69FD6CB33A14C5C2DC1B9ED /* AppIcon76@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon76@1x.png; sourceTree = "<group>"; };
-		90023A7D039756A9C0C7A991 /* AppIcon76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon76@2x.png; sourceTree = "<group>"; };
-		D36B3BFAD5945D142495D506 /* AppIcon83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon83.5@2x.png; sourceTree = "<group>"; };
+		83E26C1F1F7CB6393E9FB5D9 /* AppIcon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-1024.png"; sourceTree = "<group>"; };
+		23700102E4A0324A4BF3B8DF /* AppIcon60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60@2x.png"; sourceTree = "<group>"; };
+		B9CEFF513C4C101C1DB0B8F8 /* AppIcon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon60@3x.png"; sourceTree = "<group>"; };
+		A69FD6CB33A14C5C2DC1B9ED /* AppIcon76@1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon76@1x.png"; sourceTree = "<group>"; };
+		90023A7D039756A9C0C7A991 /* AppIcon76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon76@2x.png"; sourceTree = "<group>"; };
+		D36B3BFAD5945D142495D506 /* AppIcon83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon83.5@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
