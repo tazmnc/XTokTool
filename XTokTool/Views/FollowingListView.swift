@@ -187,11 +187,10 @@ struct FollowingListView: View {
             _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 15)
             guard !Task.isCancelled else { return }
             _ = await web.streamFollowing(maxScrolls: 40, onBatch: { batch in
-                let fresh = batch.filter { b in
+                var fresh = batch.filter { b in
                     !storage.following.contains(where: { $0.username.lowercased() == b.username.lowercased() })
                 }
                 guard !fresh.isEmpty else { return }
-                var fresh = fresh
                 for i in fresh.indices {
                     fresh[i].isKept = storage.keepList.contains(fresh[i].username)
                 }
