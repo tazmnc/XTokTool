@@ -23,6 +23,7 @@ struct TikTokUser: Identifiable, Codable, Equatable, Hashable {
     var username: String        // không có @
     var displayName: String
     var avatarURL: String?
+    var userId: String? = nil   // id số của TikTok (cần cho huỷ follow qua API)
     var isVerified: Bool
     var status: FollowStatus
     var isKept: Bool = false    // nằm trong danh sách Giữ lại (whitelist)

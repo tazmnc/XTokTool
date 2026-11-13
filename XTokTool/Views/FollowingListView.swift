@@ -170,7 +170,7 @@ struct FollowingListView: View {
         }
         scanTask?.cancel()
         isScanning = true
-        scanMessage = "Đang mở trang Following…"
+        scanMessage = "Đang mở TikTok…"
         scanTask = Task {
             defer {
                 isScanning = false
@@ -178,15 +178,9 @@ struct FollowingListView: View {
                     scanMessage = "Đã dừng — giữ \(storage.following.count) người đã thấy."
                 }
             }
-            // Cách quét mới: chỉ tải trang /following MỘT lần, gom người mới
-            // theo từng đợt và hiện + lưu ngay từng đợt — không tải thêm
-            // trang /followers, không chờ cứng, không gom hết rồi mới hiện.
-            // Nhờ vậy app nhẹ hơn nhiều, và nếu có văng giữa chừng thì
-            // những người đã thấy vẫn còn, không mất hết.
-            web.loadFollowingPage(username: username)
-            _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 15)
-            guard !Task.isCancelled else { return }
-            _ = await web.streamFollowing(maxScrolls: 40, onBatch: { batch in
+            // Gộp từng đợt người mới vào danh sách và lưu ngay (dùng chung
+            // cho cả 2 cách quét).
+            let appendBatch: ([TikTokUser]) -> Void = { batch in
                 var fresh = batch.filter { b in
                     !storage.following.contains(where: { $0.username.lowercased() == b.username.lowercased() })
                 }
@@ -197,16 +191,62 @@ struct FollowingListView: View {
                 storage.following.append(contentsOf: fresh)
                 storage.saveFollowing()
                 scanMessage = "Đã thấy \(storage.following.count) người…"
-            })
+            }
+
+            // Cách 1 (mới): gọi API nội bộ của TikTok qua fetch() trong
+            // trang đã đăng nhập — JSON thuần, phân trang, không cuộn
+            // trang, nhẹ hơn hẳn. Thất bại thì tự rơi về cách 2.
+            let api = TikTokAPI(web: web)
+            var scanned = false
+            await api.ensureLoaded(username: username)
+            if !Task.isCancelled, let secUid = await api.getSecUid(username: username) {
+                scanMessage = "Đang quét bằng API TikTok…"
+                let result = await api.fetchFollowing(secUid: secUid, onBatch: appendBatch)
+                if result.error == nil && !result.users.isEmpty {
+                    scanned = true
+                    if !result.hadMutualSignal {
+                        // API không cho biết ai là bạn bè — đối chiếu danh
+                        // sách Followers (cũng bằng API, JSON thuần).
+                        if let followers = await api.fetchFollowerUsernames(secUid: secUid) {
+                            for i in storage.following.indices where followers.contains(storage.following[i].username.lowercased()) {
+                                storage.following[i].status = .friend
+                            }
+                            storage.saveFollowing()
+                        }
+                    }
+                    storage.addLog(.success, "Quét Following bằng API TikTok: \(result.users.count) người.")
+                } else if let err = result.error {
+                    storage.addLog(.warning, "Quét API thất bại (\(err)) — thử lại bằng cách quét trang.")
+                }
+            }
+            // Cách 2 (fallback): quét DOM như v2.0 — chỉ tải trang
+            // /following 1 lần, hiện + lưu từng đợt.
+            if !scanned {
+                guard !Task.isCancelled else { return }
+                await scanViaDOM(username: username, appendBatch: appendBatch)
+            }
             guard !Task.isCancelled else { return }
-            storage.stats.totalFollowing = storage.following.count
-            storage.stats.totalFriends = friendsCount
-            storage.stats.totalNotFollowingBack = notBackCount
-            storage.stats.lastScanDate = Date()
-            storage.saveStats()
-            storage.addLog(.success, "Quét Following: \(storage.following.count) người, \(friendsCount) bạn bè, \(notBackCount) không follow lại.")
-            scanMessage = "Quét xong: \(storage.following.count) người • \(friendsCount) bạn bè • \(notBackCount) không follow lại."
+            finishScan()
         }
+    }
+
+    /// Quét DOM (v2.0): tải trang /following 1 lần, cuộn gom từng đợt.
+    private func scanViaDOM(username: String, appendBatch: @escaping ([TikTokUser]) -> Void) async {
+        scanMessage = "Đang quét trang Following…"
+        web.loadFollowingPage(username: username)
+        _ = await web.waitForContent(js: TikTokWebService.hasUserCardsJS, timeout: 15)
+        guard !Task.isCancelled else { return }
+        _ = await web.streamFollowing(maxScrolls: 40, onBatch: appendBatch)
+    }
+
+    private func finishScan() {
+        storage.stats.totalFollowing = storage.following.count
+        storage.stats.totalFriends = friendsCount
+        storage.stats.totalNotFollowingBack = notBackCount
+        storage.stats.lastScanDate = Date()
+        storage.saveStats()
+        storage.addLog(.success, "Quét Following: \(storage.following.count) người, \(friendsCount) bạn bè, \(notBackCount) không follow lại.")
+        scanMessage = "Quét xong: \(storage.following.count) người • \(friendsCount) bạn bè • \(notBackCount) không follow lại."
     }
 }
 

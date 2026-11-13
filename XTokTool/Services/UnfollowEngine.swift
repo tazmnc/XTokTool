@@ -65,13 +65,30 @@ final class UnfollowEngine: ObservableObject {
 
         task = Task { [weak self] in
             guard let self else { return }
+            // Thử huỷ bằng API trước (nhẹ, không cần mở trang từng người).
+            // Chỉ bật khi có ít nhất 1 người đã có userId (lấy từ lần quét API).
+            let api = TikTokAPI(web: web)
+            var apiReady = false
+            if targets.contains(where: { $0.userId != nil }) {
+                await api.ensureLoaded(username: storage.savedUsername)
+                apiReady = true
+            }
             for (index, user) in targets.enumerated() {
                 if Task.isCancelled { break }
                 self.progressText = "Đang huỷ [\(index + 1)/\(targets.count)] @\(user.username)…"
-                // Mở trang following rồi bấm huỷ trong WebView.
-                web.loadFollowingPage(username: storage.savedUsername)
-                await web.wait(seconds: 3)
-                let ok = await web.unfollow(username: user.username)
+                var ok = false
+                if apiReady, let uid = user.userId {
+                    ok = await api.unfollow(userId: uid)
+                    if !ok {
+                        storage.addLog(.info, "API không huỷ được @\(user.username) — thử bằng cách bấm trên trang.")
+                    }
+                }
+                if !ok {
+                    // Fallback: mở trang following rồi bấm huỷ trong WebView.
+                    web.loadFollowingPage(username: storage.savedUsername)
+                    await web.wait(seconds: 3)
+                    ok = await web.unfollow(username: user.username)
+                }
                 if ok {
                     self.doneCount += 1
                     storage.markUserProcessed(user.username)

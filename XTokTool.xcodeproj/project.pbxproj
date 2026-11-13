@@ -12,6 +12,7 @@
 		ED97B5B20032EC70F6905A78 /* TikTokAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */; };
 		7BD4FBEBD18FFD594635FB42 /* TikTokWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3882633528E372C9295FDE37 /* TikTokWebService.swift */; };
 		962C00712583F4E7BDF239B3 /* UnfollowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */; };
+		040CC128E86B6DDBDFB066DB /* TikTokAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C44117ECCF75F0088BA8245 /* TikTokAPI.swift */; };
 		B1AEE1E88D91465A1F427412 /* RepostCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */; };
 		23E7FA6A023B31EEBD1C5AEA /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */; };
 		2E4F712BAFD9CDCB7656E023 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97EF6B6ABE80D606C6375197 /* LoginView.swift */; };
@@ -37,6 +38,7 @@
 		235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokAuthManager.swift; sourceTree = "<group>"; };
 		3882633528E372C9295FDE37 /* TikTokWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokWebService.swift; sourceTree = "<group>"; };
 		EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfollowEngine.swift; sourceTree = "<group>"; };
+		4C44117ECCF75F0088BA8245 /* TikTokAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokAPI.swift; sourceTree = "<group>"; };
 		ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepostCleaner.swift; sourceTree = "<group>"; };
 		BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		97EF6B6ABE80D606C6375197 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */,
 				3882633528E372C9295FDE37 /* TikTokWebService.swift */,
 				EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */,
+				4C44117ECCF75F0088BA8245 /* TikTokAPI.swift */,
 				ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */,
 				BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */,
 			); path = Services; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 				ED97B5B20032EC70F6905A78 /* TikTokAuthManager.swift in Sources */,
 				7BD4FBEBD18FFD594635FB42 /* TikTokWebService.swift in Sources */,
 				962C00712583F4E7BDF239B3 /* UnfollowEngine.swift in Sources */,
+				040CC128E86B6DDBDFB066DB /* TikTokAPI.swift in Sources */,
 				B1AEE1E88D91465A1F427412 /* RepostCleaner.swift in Sources */,
 				23E7FA6A023B31EEBD1C5AEA /* StorageManager.swift in Sources */,
 				2E4F712BAFD9CDCB7656E023 /* LoginView.swift in Sources */,

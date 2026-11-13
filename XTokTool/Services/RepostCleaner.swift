@@ -30,6 +30,20 @@ final class RepostCleaner: ObservableObject {
         guard !isScanning else { return }
         isScanning = true
         progressText = "Đang mở tab Reposts của @\(username)…"
+        // Cách 1 (mới): liệt kê repost bằng API (JSON thuần, không cuộn trang).
+        let api = TikTokAPI(web: web)
+        await api.ensureLoaded(username: username)
+        if let secUid = await api.getSecUid(username: username),
+           let videos = await api.fetchReposts(secUid: secUid) {
+            let fresh = videos.filter { !storage.processedRepostURLs.contains($0.url) }
+            storage.reposts = fresh
+            storage.saveReposts()
+            storage.addLog(.info, "Quét Reposts bằng API: tìm thấy \(videos.count) video, còn \(fresh.count) chưa xử lý.")
+            progressText = "Tìm thấy \(videos.count) video repost (\(fresh.count) chưa xử lý)."
+            isScanning = false
+            return
+        }
+        // Cách 2 (fallback): quét DOM như trước.
         web.loadProfilePage(username: username)
         await web.wait(seconds: 4)
         let tabResult = await web.evaluateString(TikTokWebService.openRepostsTabJS)
