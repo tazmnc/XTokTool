@@ -29,6 +29,10 @@ final class TikTokAuthManager: ObservableObject {
     private let sessionCookieNames: Set<String> = ["sessionid", "sid_tt", "sessionid_ss"]
 
     private var authSession: ASWebAuthenticationSession?
+    /// Giữ mạnh context trình bày cho ASWebAuthenticationSession — thuộc tính
+    /// presentationContextProvider của session chỉ giữ weak, tạo tạm rồi bỏ
+    /// sẽ bị nil ngay và cảnh báo "weak reference will always be nil".
+    private var authContext: AuthPresentationContext?
 
     // MARK: - Kiểm tra phiên từ cookie store
 
@@ -82,7 +86,9 @@ final class TikTokAuthManager: ObservableObject {
                     continuation.resume(returning: false)
                 }
             }
-            session.presentationContextProvider = AuthPresentationContext(anchor: presentationAnchor)
+            let context = AuthPresentationContext(anchor: presentationAnchor)
+            self.authContext = context
+            session.presentationContextProvider = context
             session.prefersEphemeralWebBrowserSession = false
             self.authSession = session
             session.start()
