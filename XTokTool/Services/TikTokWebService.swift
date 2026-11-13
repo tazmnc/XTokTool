@@ -125,7 +125,7 @@ final class TikTokWebService: ObservableObject {
             await scrollDown(times: 1, interval: 1.2)
             guard let json = await evaluateString(Self.collectFollowingJS),
                   let data = json.data(using: .utf8),
-                  let rows = try? JSONDecoder().decode([FollowingRow].self, from: data) else { continue }
+                  let rows = try? JSONDecoder().decode([FollowingRowDTO].self, from: data) else { continue }
             for row in rows where !seen.contains(row.username.lowercased()) {
                 seen.insert(row.username.lowercased())
                 all.append(TikTokUser(
@@ -274,7 +274,7 @@ final class TikTokWebService: ObservableObject {
 
 // MARK: - Hàng trung gian để decode JSON từ JS
 
-private struct FollowingRow: Decodable {
+private struct FollowingRowDTO: Decodable {
     var username: String
     var displayName: String
     var avatarURL: String
