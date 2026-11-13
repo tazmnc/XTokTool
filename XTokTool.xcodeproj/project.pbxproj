@@ -1,0 +1,349 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		033CB583E33483833B6AAFF9 /* XTokToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023A27EA4D6B92A421D631B8 /* XTokToolApp.swift */; };
+		3B27A56E6BE17FE1732830BE /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7589F025E96029E0804E635 /* Models.swift */; };
+		ED97B5B20032EC70F6905A78 /* TikTokAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */; };
+		7BD4FBEBD18FFD594635FB42 /* TikTokWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3882633528E372C9295FDE37 /* TikTokWebService.swift */; };
+		962C00712583F4E7BDF239B3 /* UnfollowEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */; };
+		B1AEE1E88D91465A1F427412 /* RepostCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */; };
+		23E7FA6A023B31EEBD1C5AEA /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */; };
+		2E4F712BAFD9CDCB7656E023 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97EF6B6ABE80D606C6375197 /* LoginView.swift */; };
+		F561F4AC40E7AB1B191ABC79 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A00CF9648E127AD22B3BE2 /* HomeView.swift */; };
+		CDC758D399E8A521870604A5 /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B997F6C9B045C2E6576119 /* FollowingListView.swift */; };
+		1D3A063DEAA5E650FE57045E /* UnfollowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9767CC02FC71DE8FEE07F729 /* UnfollowView.swift */; };
+		9B56D716D4AC5815342B466F /* RepostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9B94F253729541D3BA920C /* RepostView.swift */; };
+		0366047E1EAD5CC5EA2D8838 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6C00F877111216236EB6BB /* SettingsView.swift */; };
+		20C8A23925DEC63A99535A6B /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CC878B3EF2A95285A99B47 /* LogView.swift */; };
+		DB249DB9D0FF833647E29581 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC13B5EC966CE305A2FA173A /* Assets.xcassets */; };
+		E0CD4B5E9FEABD632105FAA4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2EE9E750453353D41FC129 /* WebKit.framework */; };
+		D2ADC69F63385BFEF211D590 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A2B6641E4A86127DAE3CB9 /* AuthenticationServices.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		023A27EA4D6B92A421D631B8 /* XTokToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XTokToolApp.swift; sourceTree = "<group>"; };
+		A7589F025E96029E0804E635 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokAuthManager.swift; sourceTree = "<group>"; };
+		3882633528E372C9295FDE37 /* TikTokWebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TikTokWebService.swift; sourceTree = "<group>"; };
+		EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfollowEngine.swift; sourceTree = "<group>"; };
+		ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepostCleaner.swift; sourceTree = "<group>"; };
+		BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		97EF6B6ABE80D606C6375197 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		B4A00CF9648E127AD22B3BE2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		B2B997F6C9B045C2E6576119 /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
+		9767CC02FC71DE8FEE07F729 /* UnfollowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfollowView.swift; sourceTree = "<group>"; };
+		0B9B94F253729541D3BA920C /* RepostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepostView.swift; sourceTree = "<group>"; };
+		9B6C00F877111216236EB6BB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		94CC878B3EF2A95285A99B47 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		901C68854DFAC5E156E065D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC13B5EC966CE305A2FA173A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2942C6AE58CC1704BD36BD48 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		0F2EE9E750453353D41FC129 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		24A2B6641E4A86127DAE3CB9 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		FE930DE1182D979D65C54991 /* XTokTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XTokTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7CC421A1DDB28E78FC2224AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0CD4B5E9FEABD632105FAA4 /* WebKit.framework in Frameworks */,
+				D2ADC69F63385BFEF211D590 /* AuthenticationServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D1D0524B025E57AFFF263442 /* App */ = {isa = PBXGroup; children = (
+				023A27EA4D6B92A421D631B8 /* XTokToolApp.swift */,
+			); path = App; sourceTree = "<group>"; };
+		A1C86A29E589D48EC70B6A32 /* Models */ = {isa = PBXGroup; children = (
+				A7589F025E96029E0804E635 /* Models.swift */,
+			); path = Models; sourceTree = "<group>"; };
+		609874F33224C0C09F1FEE42 /* Services */ = {isa = PBXGroup; children = (
+				235388D56F0F602D03F21BD7 /* TikTokAuthManager.swift */,
+				3882633528E372C9295FDE37 /* TikTokWebService.swift */,
+				EEB0A89AA6DD317E367E139F /* UnfollowEngine.swift */,
+				ECAE98E8F103B6EDAC1A3367 /* RepostCleaner.swift */,
+				BD942A3DC0FB3DA3A8E1B851 /* StorageManager.swift */,
+			); path = Services; sourceTree = "<group>"; };
+		38DF21AEF4612506D6BE5CBE /* Views */ = {isa = PBXGroup; children = (
+				97EF6B6ABE80D606C6375197 /* LoginView.swift */,
+				B4A00CF9648E127AD22B3BE2 /* HomeView.swift */,
+				B2B997F6C9B045C2E6576119 /* FollowingListView.swift */,
+				9767CC02FC71DE8FEE07F729 /* UnfollowView.swift */,
+				0B9B94F253729541D3BA920C /* RepostView.swift */,
+				9B6C00F877111216236EB6BB /* SettingsView.swift */,
+				94CC878B3EF2A95285A99B47 /* LogView.swift */,
+			); path = Views; sourceTree = "<group>"; };
+		887A6F90336FF23D95C3914B /* Resources */ = {isa = PBXGroup; children = (
+				901C68854DFAC5E156E065D1 /* Info.plist */,
+				AC13B5EC966CE305A2FA173A /* Assets.xcassets */,
+			); path = Resources; sourceTree = "<group>"; };
+		FF960AF125284A3362943246 /* XTokTool */ = {isa = PBXGroup; children = (
+				D1D0524B025E57AFFF263442 /* App */,
+				A1C86A29E589D48EC70B6A32 /* Models */,
+				609874F33224C0C09F1FEE42 /* Services */,
+				38DF21AEF4612506D6BE5CBE /* Views */,
+				887A6F90336FF23D95C3914B /* Resources */,
+				2942C6AE58CC1704BD36BD48 /* Config.xcconfig */,
+			); path = XTokTool; sourceTree = "<group>"; };
+		BE8FA2D0C91C7059E96E02B9 /* Root */ = {isa = PBXGroup; children = (
+				FF960AF125284A3362943246 /* XTokTool */,
+				577BDAEDB29A56390429B041 /* Products */,
+			); sourceTree = "<group>"; };
+		577BDAEDB29A56390429B041 /* Products */ = {isa = PBXGroup; children = (
+				FE930DE1182D979D65C54991 /* XTokTool.app */,
+			); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		42AEFBAE01D2DFD981F7DA7D /* XTokTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8CF598ACC897FE8648893EB5 /* Build configuration list for PBXNativeTarget "XTokTool" */;
+			buildPhases = (
+				7A70D71C385290AF96BF1031 /* Sources */,
+				7CC421A1DDB28E78FC2224AF /* Frameworks */,
+				F964B4AC93F8CB0399137DF2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XTokTool;
+			productName = XTokTool;
+			productReference = FE930DE1182D979D65C54991 /* XTokTool.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					42AEFBAE01D2DFD981F7DA7D = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = AD8DC1A475C1871509FE9877 /* Build configuration list for PBXProject "XTokTool" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = vi;
+			mainGroup = BE8FA2D0C91C7059E96E02B9;
+			productRefGroup = 577BDAEDB29A56390429B041 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42AEFBAE01D2DFD981F7DA7D /* XTokTool */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F964B4AC93F8CB0399137DF2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB249DB9D0FF833647E29581 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A70D71C385290AF96BF1031 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				033CB583E33483833B6AAFF9 /* XTokToolApp.swift in Sources */,
+				3B27A56E6BE17FE1732830BE /* Models.swift in Sources */,
+				ED97B5B20032EC70F6905A78 /* TikTokAuthManager.swift in Sources */,
+				7BD4FBEBD18FFD594635FB42 /* TikTokWebService.swift in Sources */,
+				962C00712583F4E7BDF239B3 /* UnfollowEngine.swift in Sources */,
+				B1AEE1E88D91465A1F427412 /* RepostCleaner.swift in Sources */,
+				23E7FA6A023B31EEBD1C5AEA /* StorageManager.swift in Sources */,
+				2E4F712BAFD9CDCB7656E023 /* LoginView.swift in Sources */,
+				F561F4AC40E7AB1B191ABC79 /* HomeView.swift in Sources */,
+				CDC758D399E8A521870604A5 /* FollowingListView.swift in Sources */,
+				1D3A063DEAA5E650FE57045E /* UnfollowView.swift in Sources */,
+				9B56D716D4AC5815342B466F /* RepostView.swift in Sources */,
+				0366047E1EAD5CC5EA2D8838 /* SettingsView.swift in Sources */,
+				20C8A23925DEC63A99535A6B /* LogView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DCFB30EAE59D6917CE906371 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFS = "";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		37CDDD61FED8A39EEA88C0F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFS = "";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ADF9B2668011E455D3D7F21A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2942C6AE58CC1704BD36BD48 /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = XTokTool/Resources/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mintaz.xtoktool;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMBED_LIBRARIES_WITH_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BA0348D54C7CF6D7F19BE835 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2942C6AE58CC1704BD36BD48 /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = XTokTool/Resources/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mintaz.xtoktool;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMBED_LIBRARIES_WITH_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD8DC1A475C1871509FE9877 /* Build configuration list for PBXProject "XTokTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCFB30EAE59D6917CE906371 /* Debug */,
+				37CDDD61FED8A39EEA88C0F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8CF598ACC897FE8648893EB5 /* Build configuration list for PBXNativeTarget "XTokTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ADF9B2668011E455D3D7F21A /* Debug */,
+				BA0348D54C7CF6D7F19BE835 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}
