@@ -1,1 +1,20 @@
-IyBYQ29kZQoqLnhjd29ya3NwYWNlLwp4Y3VzZXJkYXRhLwpEZXJpdmVkRGF0YS8KKi5pcGEKKi5kU1lNLnppcAoqLmRTSU0KCiMgU3dpZnQgUGFja2FnZSBNYW5hZ2VyCi5idWlsZC8KLnN3aWZ0cG0vCgojIG1hY09TDS5EU19TdG9yZQoqLnN3cAoKIyBTZWNyZXRzIOKAlCBraMO0bmcgYmFvIGdp4budIGNvbW1pdCBrZXkvc2VjcmV0IHRo4bqtdAoqKi9Db25maWcubG9jYWwueGNjb25maWcKKi5tb2JpbGVwcm92aXNpb24KKi5wMTIK
+# Xcode
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+*.swp
+
+# Secrets — không bao giờ commit key/secret thật
+**/Config.local.xcconfig
+*.mobileprovision
+*.p12
